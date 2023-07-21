@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Weather Forecast</title>
+  <style>
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .form {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 200px;
+      height: 30px;
+      padding: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #weatherInfo {
+      font-size: 18px;
+    }
+  </style>
+  <script>
+    function getWeather() {
+      var city = document.getElementById("cityInput").value;
+      var apiKey = "e02bec7854f244c3b4795332230407"; 
+
+      var xhr = new XMLHttpRequest();
+      xhr.open(
+        "GET",
+        "https://api.weatherapi.com/v1/current.json?key=" + apiKey + "&q=" + city,
+        true
+      );
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          var temperature = response.current.temp_c;
+          var description = response.current.condition.text;
+          var weatherInfo = "Temperature: " + temperature + "°C<br>Description: " + description;
+
+          document.getElementById("weatherInfo").innerHTML = weatherInfo;
+        } else {
+          document.getElementById("weatherInfo").innerHTML = "Error retrieving weather data";
+        }
+      };
+
+      xhr.send();
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Weather Forecast</h1>
+    <div class="form">
+      <input type="text" id="cityInput" placeholder="Enter City(Eg:London,Berlin,etc)">
+      <button onclick="getWeather()">Get Forecast</button>
+    </div>
+    <div id="weatherInfo"></div>
+  </div>
+</body>
+</html>
